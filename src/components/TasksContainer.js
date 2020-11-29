@@ -1,45 +1,16 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Platform } from 'react-native'
+import { useSelector } from 'react-redux'
 
+import { getTasks } from '../redux/selectors'
 import TasksList from './TasksList'
 import TaskForm from './TaskForm'
 import CountersContainer from './CountersContainer'
 import FloatingButton from './FloatingButton'
 
 const TasksContainer = () => {
-  const [tasks, setTasks] = useState([])
+  const tasks = useSelector(getTasks)
   const [isFormOpened, setIsFormOpened] = useState(false)
-  
-  const onAddTask = title => {
-    const newTask = {id: new Date().getTime().toString(), title: title, completed: false}
-    setTasks([newTask, ...tasks])
-  }
-  
-  const onChangeStatus = id => {
-    let newTasks = []
-    tasks.forEach(task => {
-      if (task.id === id) {
-        newTasks.push({
-          id: id,
-          title: task.title,
-          completed: !task.completed
-        })
-      } else {
-        newTasks.push(task)
-      }
-    })
-    setTasks(newTasks)
-  }
-  
-  const onDeleteTask = id => {
-    let newTasks = []
-    tasks.forEach(task => {
-      if (task.id !== id) {
-        newTasks.push(task)
-      }
-    })
-    setTasks(newTasks)
-  }
   
   const toggleForm = () => {
     setIsFormOpened(!isFormOpened)
@@ -48,7 +19,7 @@ const TasksContainer = () => {
   return (
     <View style={styles.container}>
     {
-      isFormOpened && <TaskForm onAddTask={onAddTask}/>
+      isFormOpened && <TaskForm/>
     }
       <CountersContainer
         nbTasks={tasks.length}
@@ -58,8 +29,6 @@ const TasksContainer = () => {
         tasks.length > 0 &&
         <TasksList
           tasks={tasks}
-          onChangeStatus={onChangeStatus}
-          onDeleteTask={onDeleteTask}
           />
       }
       <FloatingButton toggleForm={toggleForm} isFormOpened={isFormOpened}/>

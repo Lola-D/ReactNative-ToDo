@@ -2,7 +2,7 @@ import React from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 
 const days = [
-  'Dimancehe',
+  'Dimanche',
   'Lundi',
   'Mardi',
   'Mercredi',

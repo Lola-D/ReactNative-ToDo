@@ -1,8 +1,12 @@
 import React, { useState } from 'react'
-import { View, TextInput, StyleSheet, Button } from 'react-native'
+import { View, TextInput, StyleSheet, Button, Text } from 'react-native'
+import { useDispatch } from 'react-redux'
 
-const TaskForm = ({onAddTask}) => {
+import { addTask } from '../redux/actions'
+
+const TaskForm = () => {
   const [title, setTitle] = useState('')
+  const dispatch = useDispatch()
   
   const _onChangeText = value => {
     setTitle(value)
@@ -10,21 +14,25 @@ const TaskForm = ({onAddTask}) => {
   
   const _onPressBtn = () => {
     if (title.length > 0) {  
-      onAddTask(title)
+      dispatch(addTask(title))
       setTitle('')
     }
   }
   
   return (
-    <View style={styles.container}>
-      <View style={styles.containerInput}>
-        <TextInput
-          value={title} 
-          onChangeText={_onChangeText}
-          placeholder='Nouvelle tâche'
-        />
+    <View>
+      <View style={styles.container}>
+        <View style={styles.containerInput}>
+          <TextInput
+            value={title} 
+            onChangeText={_onChangeText}
+            placeholder='Nouvelle tâche'
+            maxLength={25}
+          />
+        </View>
+        <Button onPress={_onPressBtn} title='Ajouter' color='#841584' />
       </View>
-      <Button onPress={_onPressBtn} title='Ajouter' color='#841584' />
+      <Text style={styles.infos}>25 caractères maximum</Text>
     </View>
   );
 }
@@ -34,7 +42,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginBottom: 15
   },
   containerInput: {
     width: '75%',
@@ -43,6 +50,11 @@ const styles = StyleSheet.create({
     borderColor: '#841584',
     borderRadius: 4,
     padding: 10,
+  },
+  infos : {
+    color: 'grey',
+    fontStyle: 'italic',
+    fontSize:12
   }
 })
 
